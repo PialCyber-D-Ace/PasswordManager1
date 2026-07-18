@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sign In — Vault</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+    --bg: #0a0e1a; --bg-2: #0f1424; --surface: rgba(255,255,255,0.04);
+    --border: rgba(255,255,255,0.08); --text: #e6ebff; --text-muted: #8b93b3;
+    --primary: #4f7cff; --secondary: #8b5cf6; --accent: #22d3ee;
+    --gradient: linear-gradient(135deg, #4f7cff 0%, #8b5cf6 100%);
+    --radius: 14px; --radius-sm: 10px;
+}
+body { 
+    font-family: 'Inter', system-ui, sans-serif; 
+    background: radial-gradient(1200px 800px at 10% 0%, #1a2350 0%, transparent 60%),
+               radial-gradient(1000px 700px at 100% 100%, #2a1a50 0%, transparent 60%),
+               var(--bg);
+    color: var(--text); min-height: 100vh;
+}
+.navbar { 
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,26,0.7); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 32px; display: flex; justify-content: space-between; align-items: center;
+}
+.nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; color: #fff; text-decoration: none; }
+.nav-logo { 
+    width: 36px; height: 36px; border-radius: 10px;
+    background: var(--gradient); display: grid; place-items: center; color: #fff;
+    box-shadow: 0 6px 20px rgba(79,124,255,0.4);
+}
+.nav-links { display: flex; gap: 8px; align-items: center; }
+.btn { 
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 24px; border-radius: var(--radius-sm);
+    font-size: 14px; font-weight: 600; transition: all 0.3s;
+    border: 1px solid transparent; text-decoration: none; cursor: pointer;
+}
+.btn-primary { 
+    background: var(--gradient); color: #fff;
+    box-shadow: 0 6px 20px rgba(79,124,255,0.3);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(79,124,255,0.5); }
+.btn-ghost { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+.btn-ghost:hover { background: rgba(255,255,255,0.08); }
+.btn-sm { padding: 8px 16px; font-size: 13px; }
+.auth-wrap { 
+    min-height: calc(100vh - 70px); display: grid; place-items: center; padding: 40px 20px;
+}
+.auth-card { 
+    width: 100%; max-width: 440px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 40px; backdrop-filter: blur(20px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+.auth-card .logo { 
+    width: 56px; height: 56px; border-radius: 14px;
+    background: var(--gradient); display: grid; place-items: center;
+    color: #fff; font-size: 22px; margin: 0 auto 20px;
+    box-shadow: 0 10px 30px rgba(79,124,255,0.4);
+}
+.auth-card h2 { text-align: center; font-size: 26px; margin-bottom: 8px; }
+.auth-card .subtitle { text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 28px; }
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; font-size: 13px; font-weight: 500; color: var(--text-muted); margin-bottom: 8px; }
+.input-wrap { position: relative; }
+.input-wrap i.leading { 
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--text-muted); font-size: 14px;
+}
+.form-input { 
+    width: 100%; padding: 12px 14px 12px 42px;
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); color: var(--text); font-size: 14px;
+    transition: all 0.3s;
+}
+.form-input:focus { 
+    outline: none; border-color: var(--primary);
+    background: rgba(79,124,255,0.05);
+    box-shadow: 0 0 0 3px rgba(79,124,255,0.15);
+}
+.toggle-pass { 
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    color: var(--text-muted); cursor: pointer; padding: 4px;
+}
+.toggle-pass:hover { color: var(--primary); }
+.form-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 13px; }
+.checkbox { display: flex; align-items: center; gap: 8px; color: var(--text-muted); cursor: pointer; }
+.checkbox input { accent-color: var(--primary); }
+.link { color: var(--primary); font-weight: 500; text-decoration: none; }
+.link:hover { text-decoration: underline; }
+.btn-block { width: 100%; justify-content: center; padding: 14px; }
+.auth-footer { text-align: center; margin-top: 24px; font-size: 14px; color: var(--text-muted); }
+.bg-orbs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.bg-orbs::before, .bg-orbs::after { 
+    content: ""; position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.35;
+}
+.bg-orbs::before { 
+    width: 600px; height: 600px; background: #4f7cff; top: -200px; left: -200px;
+    animation: float 20s ease-in-out infinite;
+}
+.bg-orbs::after { 
+    width: 500px; height: 500px; background: #8b5cf6; bottom: -200px; right: -150px;
+    animation: float 25s ease-in-out infinite reverse;
+}
+@keyframes float { 
+    0%, 100% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(60px,-40px) scale(1.1); }
+}
+</style>
+</head>
+<body>
+<div class="bg-orbs"></div>
+
+<nav class="navbar">
+    <a href="index.html" class="nav-brand">
+        <div class="nav-logo"><i class="fa-solid fa-shield-halved"></i></div>
+        <span>Vault</span>
+    </a>
+    <div class="nav-links">
+        <a href="register.html" class="btn btn-primary btn-sm">Create Account</a>
+    </div>
+</nav>
+
+<div class="auth-wrap">
+    <div class="auth-card">
+        <div class="logo"><i class="fa-solid fa-lock"></i></div>
+        <h2>Welcome back</h2>
+        <p class="subtitle">Sign in to access your secure vault</p>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Email address</label>
+                <div class="input-wrap">
+                    <i class="fa-solid fa-envelope leading"></i>
+                    <input type="email" id="email" class="form-input" placeholder="you@example.com" required />
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Master password</label>
+                <div class="input-wrap">
+                    <i class="fa-solid fa-key leading"></i>
+                    <input type="password" id="password" class="form-input" placeholder="Enter your password" required />
+                    <span class="toggle-pass"><i class="fa-solid fa-eye"></i></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <label class="checkbox"><input type="checkbox" /> Remember me</label>
+                <a href="#" class="link">Forgot password?</a>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+        </form>
+
+        <div class="auth-footer">
+            Don't have an account? <a href="register.html" class="link">Create one</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Direct Login Logic (No external files needed)
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+
+        if (!email || !password) { 
+            alert('Please fill in all fields'); 
+            return; 
+        }
+
+        const btn = this.querySelector('button[type="submit"]');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = 'Signing in...';
+        btn.disabled = true;
+
+        try {
+            // Call the Java Backend
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
+            });
+            const data = await res.json();
+
+            if (res.ok && data.success) {
+                // Save user to browser memory
+                localStorage.setItem('pm_user', JSON.stringify({ 
+                    fullName: data.fullName, 
+                    email: data.email 
+                }));
+                // Go to dashboard
+                window.location.href = 'dashboard.html';
+            } else {
+                alert(data.message || 'Login failed. Check your email and password.');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        } catch (err) {
+            alert('Cannot connect to server! Make sure the Java server is running in VS Code.');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    });
+
+    // Fix Show/Hide Password for Login Page
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.toggle-pass');
+        if (btn) {
+            const input = btn.parentElement.querySelector('input');
+            const icon = btn.querySelector('i');
+            if (input && icon) {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.className = 'fa-solid fa-eye-slash';
+                } else {
+                    input.type = 'password';
+                    icon.className = 'fa-solid fa-eye';
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

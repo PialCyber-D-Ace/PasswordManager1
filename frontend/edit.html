@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Edit Password — Vault</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root { --bg: #0a0e1a; --surface: rgba(255,255,255,0.04); --border: rgba(255,255,255,0.08); --text: #e6ebff; --text-muted: #8b93b3; --primary: #4f7cff; --secondary: #8b5cf6; --gradient: linear-gradient(135deg, #4f7cff 0%, #8b5cf6 100%); --radius: 14px; --radius-sm: 10px; --transition: all 0.3s; }
+body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+.bg-orbs { position: fixed; inset: 0; z-index: 0; pointer-events: none; } .bg-orbs::before, .bg-orbs::after { content: ""; position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.35; } .bg-orbs::before { width: 600px; height: 600px; background: #4f7cff; top: -200px; left: -200px; animation: float 20s infinite; } .bg-orbs::after { width: 500px; height: 500px; background: #8b5cf6; bottom: -200px; right: -150px; animation: float 25s infinite reverse; } @keyframes float { 0%,100%{transform:translate(0,0)} 50%{transform:translate(60px,-40px)} }
+.navbar { position: sticky; top: 0; z-index: 100; background: rgba(10,14,26,0.7); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+.nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; color: #fff; text-decoration: none; } .nav-logo { width: 36px; height: 36px; border-radius: 10px; background: var(--gradient); display: grid; place-items: center; color: #fff; box-shadow: 0 6px 20px rgba(79,124,255,0.4); }
+.nav-links { display: flex; gap: 8px; align-items: center; } .nav-links a { padding: 8px 16px; border-radius: 8px; font-size: 14px; color: var(--text-muted); transition: var(--transition); } .nav-links a:hover { color: var(--text); background: var(--surface); }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; transition: var(--transition); border: 1px solid transparent; cursor: pointer; text-decoration: none; } .btn-primary { background: var(--gradient); color: #fff; box-shadow: 0 6px 20px rgba(79,124,255,0.3); } .btn-primary:hover { transform: translateY(-2px); } .btn-ghost { background: var(--surface); color: var(--text); border: 1px solid var(--border); } .btn-ghost:hover { background: rgba(255,255,255,0.08); } .btn-sm { padding: 8px 14px; font-size: 13px; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; } .page { padding: 60px 0; min-height: calc(100vh - 70px); }
+.form-card { max-width: 640px; margin: 0 auto; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 40px; backdrop-filter: blur(20px); } .form-card h2 { font-size: 24px; margin-bottom: 6px; } .form-card .subtitle { color: var(--text-muted); font-size: 14px; margin-bottom: 28px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; } .form-grid .full { grid-column: 1 / -1; }
+.form-group { margin-bottom: 18px; } .form-group label { display: block; font-size: 13px; font-weight: 500; color: var(--text-muted); margin-bottom: 8px; }
+.input-wrap { position: relative; } .input-wrap i.leading { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px; }
+.form-input { width: 100%; padding: 12px 14px 12px 42px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 14px; transition: var(--transition); } .form-input:focus { outline: none; border-color: var(--primary); background: rgba(79,124,255,0.05); box-shadow: 0 0 0 3px rgba(79,124,255,0.15); } textarea.form-input { min-height: 90px; resize: vertical; padding: 12px 14px; } select.form-input { padding: 12px 14px 12px 42px; appearance: none; cursor: pointer; }
+.toggle-pass { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; } .toggle-pass:hover { color: var(--primary); }
+.form-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
+.toast-container { position: fixed; top: 24px; right: 24px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; } .toast { min-width: 280px; padding: 14px 18px; background: rgba(15,20,36,0.95); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); animation: slideIn 0.3s ease; } .toast.success { border-left: 3px solid #10b981; } .toast.error { border-left: 3px solid #ef4444; } .toast i { font-size: 18px; } .toast.success i { color: #10b981; } .toast.error i { color: #ef4444; } .toast .msg { font-size: 14px; flex: 1; } @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+.modal-backdrop { position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 20px; } .modal-backdrop.active { display: flex; } .modal { background: #0f1424; border: 1px solid var(--border); border-radius: 18px; padding: 28px; max-width: 420px; width: 100%; } .modal h3 { font-size: 18px; margin-bottom: 8px; } .modal p { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; } .modal-actions { display: flex; gap: 10px; justify-content: flex-end; } .loader { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; } @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="bg-orbs"></div>
+<nav class="navbar">
+    <a href="dashboard.html" class="nav-brand"><div class="nav-logo"><i class="fa-solid fa-shield-halved"></i></div><span>Vault</span></a>
+    <div class="nav-links"><a href="dashboard.html">Dashboard</a><a href="add.html">Add New</a><a href="profile.html">Profile</a><button id="logoutBtn" class="btn btn-ghost btn-sm"><i class="fa-solid fa-right-from-bracket"></i> Logout</button></div>
+</nav>
+<div class="container page">
+    <div class="form-card">
+        <h2><i class="fa-solid fa-pen" style="color:var(--secondary);"></i> Edit Password</h2>
+        <p class="subtitle">Update your saved credential</p>
+        <form id="editForm">
+            <input type="hidden" id="id" />
+            <div class="form-grid">
+                <div class="form-group"><label>Website Name *</label><div class="input-wrap"><i class="fa-solid fa-globe leading"></i><input type="text" id="websiteName" class="form-input" required /></div></div>
+                <div class="form-group"><label>Website URL</label><div class="input-wrap"><i class="fa-solid fa-link leading"></i><input type="url" id="websiteUrl" class="form-input" /></div></div>
+                <div class="form-group"><label>Username / Email *</label><div class="input-wrap"><i class="fa-solid fa-user leading"></i><input type="text" id="username" class="form-input" required /></div></div>
+                <div class="form-group"><label>Category</label><div class="input-wrap"><i class="fa-solid fa-tag leading"></i><select id="category" class="form-input"><option>General</option><option>Social</option><option>Email</option><option>Banking</option><option>Shopping</option><option>Work</option><option>Other</option></select></div></div>
+                <div class="form-group full"><label>Password *</label><div class="input-wrap" style="display:flex;gap:8px;"><div class="input-wrap" style="flex:1;"><i class="fa-solid fa-key leading"></i><input type="password" id="password" class="form-input" required /><span class="toggle-pass"><i class="fa-solid fa-eye"></i></span></div><button type="button" id="generateBtn" class="btn btn-ghost"><i class="fa-solid fa-wand-magic-sparkles"></i></button></div></div>
+                <div class="form-group full"><label>Notes</label><textarea id="notes" class="form-input" style="padding-left:14px;"></textarea></div>
+            </div>
+            <div class="form-actions"><a href="dashboard.html" class="btn btn-ghost">Cancel</a><button type="submit" class="btn btn-primary"><i class="fa-solid fa-save"></i> Update</button></div>
+        </form>
+    </div>
+</div>
+<script src="js/utils.js"></script>
+<script>
+Session.requireAuth(); const user = Session.get(); const params = new URLSearchParams(window.location.search); const id = params.get('id');
+async function loadPassword() { const res = await api('/api/passwords', { query: { email: user.email } }); if (!res.ok) return; const p = res.data.find(x => x.id == id); if (!p) { toast('Password not found', 'error'); return; } document.getElementById('id').value = p.id; document.getElementById('websiteName').value = p.websiteName; document.getElementById('websiteUrl').value = p.websiteUrl; document.getElementById('username').value = p.username; document.getElementById('password').value = p.password; document.getElementById('notes').value = p.notes; document.getElementById('category').value = p.category || 'General'; }
+loadPassword();
+document.getElementById('generateBtn').addEventListener('click', () => { document.getElementById('password').value = generatePassword(16); });
+document.getElementById('editForm').addEventListener('submit', async (e) => { e.preventDefault(); const body = { id: document.getElementById('id').value, email: user.email, websiteName: document.getElementById('websiteName').value.trim(), websiteUrl: document.getElementById('websiteUrl').value.trim(), username: document.getElementById('username').value.trim(), password: document.getElementById('password').value, notes: document.getElementById('notes').value.trim(), category: document.getElementById('category').value }; const btn = e.target.querySelector('button[type="submit"]'); btn.disabled = true; btn.innerHTML = '<span class="loader"></span> Updating...'; const res = await api('/api/passwords', { method: 'PUT', body }); btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-save"></i> Update'; if (res.ok && res.data.success) { toast('Password updated!', 'success'); setTimeout(() => window.location.href = 'dashboard.html', 700); } else { toast('Update failed', 'error'); } });
+document.getElementById('logoutBtn').addEventListener('click', async () => { const ok = await confirmDialog('Logout?', 'Sign out?'); if (ok) { Session.clear(); window.location.href = 'login.html'; } });
+</script>
+<script src="js/app.js"></script>
+<script>
+    // Fix Show/Hide Password for Add Page (Nested Flex Structure)
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.toggle-pass');
+        
+        if (btn) {
+            // The add page has nested .input-wrap divs, so we search up from the button
+            let current = btn.parentElement;
+            let input = null;
+            
+            // Keep going up until we find an <input type="password">
+            while (current && !input) {
+                input = current.querySelector('input[type="password"]');
+                current = current.parentElement;
+            }
+            
+            const icon = btn.querySelector('i');
+            
+            if (input && icon) {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.className = 'fa-solid fa-eye-slash';
+                } else {
+                    input.type = 'password';
+                    icon.className = 'fa-solid fa-eye';
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+src/passwordmanager/oracleJDK-26/
+*.class
+out/
