@@ -7,12 +7,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-:root { --bg: #0a0e1a; --surface: rgba(255,255,255,0.04); --surface-hover: rgba(255,255,255,0.08); --border: rgba(255,255,255,0.08); --text: #e6ebff; --text-muted: #8b93b3; --primary: #4f7cff; --secondary: #8b5cf6; --accent: #22d3ee; --success: #10b981; --danger: #ef4444; --gradient: linear-gradient(135deg, #4f7cff 0%, #8b5cf6 100%); --radius: 14px; --radius-sm: 10px; --transition: all 0.3s; }
+:root { --bg: #0a0e1a; --surface: rgba(255,255,255,0.04); --surface-hover: rgba(255,255,255,0.08); --border: rgba(255,255,255,0.08); --text: #e6ebff; --text-muted: #8b93b3; --primary: #4f7cff; --secondary: #8b5cf6; --accent: #22d3ee; --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --gradient: linear-gradient(135deg, #4f7cff 0%, #8b5cf6 100%); --radius: 14px; --radius-sm: 10px; --transition: all 0.3s; }
 body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 .bg-orbs { position: fixed; inset: 0; z-index: 0; pointer-events: none; } .bg-orbs::before, .bg-orbs::after { content: ""; position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.35; } .bg-orbs::before { width: 600px; height: 600px; background: #4f7cff; top: -200px; left: -200px; animation: float 20s infinite; } .bg-orbs::after { width: 500px; height: 500px; background: #8b5cf6; bottom: -200px; right: -150px; animation: float 25s infinite reverse; } @keyframes float { 0%,100%{transform:translate(0,0)} 50%{transform:translate(60px,-40px)} }
 .navbar { position: sticky; top: 0; z-index: 100; background: rgba(10,14,26,0.7); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
 .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; color: #fff; text-decoration: none; } .nav-logo { width: 36px; height: 36px; border-radius: 10px; background: var(--gradient); display: grid; place-items: center; color: #fff; box-shadow: 0 6px 20px rgba(79,124,255,0.4); }
-.nav-links { display: flex; gap: 8px; align-items: center; } .nav-links a { padding: 8px 16px; border-radius: 8px; font-size: 14px; color: var(--text-muted); transition: var(--transition); } .nav-links a:hover { color: var(--text); background: var(--surface); }
+.nav-links { display: flex; gap: 8px; align-items: center; } .nav-links a { padding: 8px 16px; border-radius: 8px; font-size: 14px; color: var(--text-muted); transition: var(--transition); text-decoration: none; } .nav-links a:hover { color: var(--text); background: var(--surface); }
 .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; transition: var(--transition); border: 1px solid transparent; cursor: pointer; text-decoration: none; } .btn-primary { background: var(--gradient); color: #fff; box-shadow: 0 6px 20px rgba(79,124,255,0.3); } .btn-primary:hover { transform: translateY(-2px); } .btn-ghost { background: var(--surface); color: var(--text); border: 1px solid var(--border); } .btn-ghost:hover { background: var(--surface-hover); } .btn-danger { background: rgba(239,68,68,0.15); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); } .btn-sm { padding: 8px 14px; font-size: 13px; } .btn-icon { width: 36px; height: 36px; padding: 0; display: grid; place-items: center; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); transition: var(--transition); } .btn-icon:hover { background: var(--surface-hover); color: var(--primary); }
 .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; } .page { padding: 60px 0; min-height: calc(100vh - 70px); }
 .grad-text { background: linear-gradient(135deg, #fff 0%, #a9b8ff 50%, #c9a7ff 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -23,6 +23,7 @@ body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color
 .site-cell { display: flex; align-items: center; gap: 12px; } .site-logo { width: 36px; height: 36px; border-radius: 10px; background: var(--gradient); display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 14px; flex-shrink: 0; } .site-info .name { font-weight: 600; } .site-info .url { font-size: 12px; color: var(--text-muted); }
 .pass-cell { display: flex; align-items: center; gap: 8px; font-family: monospace; font-size: 13px; } .actions { display: flex; gap: 6px; }
 .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); } .empty-state i { font-size: 48px; margin-bottom: 16px; opacity: 0.4; } .empty-state h3 { color: var(--text); margin-bottom: 8px; }
+.category-badge { font-size:12px; padding:4px 10px; border-radius:6px; color:#ffffff; font-weight:600; display:inline-block; }
 .toast-container { position: fixed; top: 24px; right: 24px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; } .toast { min-width: 280px; padding: 14px 18px; background: rgba(15,20,36,0.95); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); animation: slideIn 0.3s ease; } .toast.success { border-left: 3px solid #10b981; } .toast.error { border-left: 3px solid #ef4444; } .toast i { font-size: 18px; } .toast.success i { color: #10b981; } .toast.error i { color: #ef4444; } .toast .msg { font-size: 14px; flex: 1; } @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 .modal-backdrop { position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 20px; } .modal-backdrop.active { display: flex; animation: fadeIn 0.2s ease; } @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } .modal { background: #0f1424; border: 1px solid var(--border); border-radius: 18px; padding: 28px; max-width: 420px; width: 100%; animation: scaleIn 0.25s; } @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } } .modal h3 { font-size: 18px; margin-bottom: 8px; } .modal p { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; } .modal-actions { display: flex; gap: 10px; justify-content: flex-end; } .loader { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; } @keyframes spin { to { transform: rotate(360deg); } }
 </style>
@@ -47,121 +48,135 @@ body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color
         <div id="emptyState" class="empty-state" style="display:none;"><i class="fa-solid fa-vault"></i><h3>Your vault is empty</h3><p>Click "Add Password" to save your first credential.</p></div>
     </div>
 </div>
-<script src="js/utils.js"></script><script src="js/dashboard.js"></script><script src="js/app.js"></script>
 <script>
-    // 1. Check Login & Set Welcome Name
-    const user = JSON.parse(localStorage.getItem('pm_user'));
-    if (!user) { window.location.href = 'login.html'; }
-    else { document.getElementById('welcomeName').textContent = user.fullName; }
+// Category color mapping
+function getCategoryColor(category) {
+    const colors = {
+        'General': '#4f7cff',
+        'Social': '#8b5cf6',
+        'Email': '#22d3ee',
+        'Banking': '#10b981',
+        'Shopping': '#f59e0b',
+        'Work': '#ef4444',
+        'Other': '#6b7280'
+    };
+    return colors[category] || '#4f7cff';
+}
 
-    // 2. Logout Button
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-        if(confirm('Sign out?')) { localStorage.removeItem('pm_user'); window.location.href = 'login.html'; }
-    });
+// 1. Check Login & Set Welcome Name
+const user = JSON.parse(localStorage.getItem('pm_user'));
+if (!user) { window.location.href = 'login.html'; }
+else { document.getElementById('welcomeName').textContent = user.fullName; }
 
-    // 3. Load Passwords from Backend
-    async function loadPasswords() {
-        if (!user) return;
-        try {
-            const res = await fetch('/api/passwords?email=' + encodeURIComponent(user.email));
-            const passwords = await res.json();
-            const tbody = document.getElementById('passwordsBody');
-            const emptyState = document.getElementById('emptyState');
+// 2. Logout Button
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    if(confirm('Sign out?')) { localStorage.removeItem('pm_user'); window.location.href = 'login.html'; }
+});
 
-            tbody.innerHTML = ''; // Clear table
+// 3. Load Passwords from Backend
+async function loadPasswords() {
+    if (!user) return;
+    try {
+        const res = await fetch('/api/passwords?email=' + encodeURIComponent(user.email));
+        const passwords = await res.json();
+        const tbody = document.getElementById('passwordsBody');
+        const emptyState = document.getElementById('emptyState');
 
-            if (passwords.length === 0) {
-                emptyState.style.display = 'block';
-            } else {
-                emptyState.style.display = 'none';
-                passwords.forEach(p => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>
-                            <div class="site-cell">
-                                <div class="site-logo">${p.websiteName.charAt(0).toUpperCase()}</div>
-                                <div class="site-info">
-                                    <div class="name">${p.websiteName}</div>
-                                    <div class="url">${p.websiteUrl || '—'}</div>
-                                </div>
+        tbody.innerHTML = '';
+
+        if (passwords.length === 0) {
+            emptyState.style.display = 'block';
+        } else {
+            emptyState.style.display = 'none';
+            passwords.forEach(p => {
+                const tr = document.createElement('tr');
+                const categoryColor = getCategoryColor(p.category);
+                tr.innerHTML = `
+                    <td>
+                        <div class="site-cell">
+                            <div class="site-logo">${p.websiteName.charAt(0).toUpperCase()}</div>
+                            <div class="site-info">
+                                <div class="name">${p.websiteName}</div>
+                                <div class="url">${p.websiteUrl || '—'}</div>
                             </div>
-                        </td>
-                        <td>${p.username}</td>
-                        <td>
-                            <div class="pass-cell">
-                                <span class="pass-value" data-hidden="true" data-pass="${p.password}">••••••••</span>
-                                <button class="btn-icon btn-toggle" title="Show/Hide"><i class="fa-solid fa-eye"></i></button>
-                                <button class="btn-icon btn-copy" title="Copy"><i class="fa-solid fa-copy"></i></button>
-                            </div>
-                        </td>
-                        <td><span style="font-size:12px;padding:4px 10px;border-radius:6px;background:rgba(79,124,255,.15);color:var(--primary);">${p.category || 'General'}</span></td>
-                        <td>
-                            <div class="actions">
-                                <button class="btn-icon btn-edit" onclick="window.location.href='edit.html?id=${p.id}'" title="Edit"><i class="fa-solid fa-pen"></i></button>
-                                <button class="btn-icon btn-delete" onclick="deletePassword(${p.id})" title="Delete" style="color:var(--danger);"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
+                        </div>
+                    </td>
+                    <td>${p.username}</td>
+                    <td>
+                        <div class="pass-cell">
+                            <span class="pass-value" data-hidden="true" data-pass="${p.password}">••••••••</span>
+                            <button class="btn-icon btn-toggle" title="Show/Hide"><i class="fa-solid fa-eye"></i></button>
+                            <button class="btn-icon btn-copy" title="Copy"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                    </td>
+                    <td><span class="category-badge" style="background:${categoryColor};">${p.category || 'General'}</span></td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn-icon btn-edit" onclick="window.location.href='edit.html?id=${p.id}'" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                            <button class="btn-icon btn-delete" onclick="deletePassword(${p.id})" title="Delete" style="color:var(--danger);"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    } catch (err) {
+        console.error('Failed to load passwords', err);
+    }
+}
+
+// 4. Delete Password Function
+window.deletePassword = async function(id) {
+    if(!confirm('Are you sure you want to delete this password?')) return;
+    try {
+        const res = await fetch(`/api/passwords?email=${encodeURIComponent(user.email)}&id=${id}`, { method: 'DELETE' });
+        if(res.ok) loadPasswords();
+        else alert('Failed to delete');
+    } catch(err) { alert('Server error'); }
+}
+
+// 5. Show/Hide & Copy Buttons
+document.addEventListener('click', function(e) {
+    const toggleBtn = e.target.closest('.btn-toggle');
+    if (toggleBtn) {
+        const passCell = toggleBtn.closest('.pass-cell');
+        if (passCell) {
+            const span = passCell.querySelector('.pass-value');
+            const icon = toggleBtn.querySelector('i');
+            if (span && icon) {
+                if (span.dataset.hidden === 'true') {
+                    span.textContent = span.dataset.pass;
+                    span.dataset.hidden = 'false';
+                    icon.className = 'fa-solid fa-eye-slash';
+                } else {
+                    span.textContent = '••••••••';
+                    span.dataset.hidden = 'true';
+                    icon.className = 'fa-solid fa-eye';
+                }
+            }
+        }
+    }
+
+    const copyBtn = e.target.closest('.btn-copy');
+    if (copyBtn) {
+        const passCell = copyBtn.closest('.pass-cell');
+        if (passCell) {
+            const span = passCell.querySelector('.pass-value');
+            if (span && span.dataset.pass) {
+                navigator.clipboard.writeText(span.dataset.pass).then(() => {
+                    const icon = copyBtn.querySelector('i');
+                    if(icon) {
+                        icon.className = 'fa-solid fa-check'; icon.style.color = '#10b981';
+                        setTimeout(() => { icon.className = 'fa-solid fa-copy'; icon.style.color = ''; }, 1500);
+                    }
                 });
             }
-        } catch (err) {
-            console.error('Failed to load passwords', err);
         }
     }
+});
 
-    // 4. Delete Password Function
-    window.deletePassword = async function(id) {
-        if(!confirm('Are you sure you want to delete this password?')) return;
-        try {
-            const res = await fetch(`/api/passwords?email=${encodeURIComponent(user.email)}&id=${id}`, { method: 'DELETE' });
-            if(res.ok) loadPasswords();
-            else alert('Failed to delete');
-        } catch(err) { alert('Server error'); }
-    }
-
-    // 5. Show/Hide & Copy Buttons (Global Click Listener)
-    document.addEventListener('click', function(e) {
-        const toggleBtn = e.target.closest('.btn-toggle');
-        if (toggleBtn) {
-            const passCell = toggleBtn.closest('.pass-cell');
-            if (passCell) {
-                const span = passCell.querySelector('.pass-value');
-                const icon = toggleBtn.querySelector('i');
-                if (span && icon) {
-                    if (span.dataset.hidden === 'true') {
-                        span.textContent = span.dataset.pass;
-                        span.dataset.hidden = 'false';
-                        icon.className = 'fa-solid fa-eye-slash';
-                    } else {
-                        span.textContent = '••••••••';
-                        span.dataset.hidden = 'true';
-                        icon.className = 'fa-solid fa-eye';
-                    }
-                }
-            }
-        }
-
-        const copyBtn = e.target.closest('.btn-copy');
-        if (copyBtn) {
-            const passCell = copyBtn.closest('.pass-cell');
-            if (passCell) {
-                const span = passCell.querySelector('.pass-value');
-                if (span && span.dataset.pass) {
-                    navigator.clipboard.writeText(span.dataset.pass).then(() => {
-                        const icon = copyBtn.querySelector('i');
-                        if(icon) {
-                            icon.className = 'fa-solid fa-check'; icon.style.color = '#10b981';
-                            setTimeout(() => { icon.className = 'fa-solid fa-copy'; icon.style.color = ''; }, 1500);
-                        }
-                    });
-                }
-            }
-        }
-    });
-
-    // Initialize
-    if(user) loadPasswords();
+// Initialize
+if(user) loadPasswords();
 </script>
 </body>
 </html>
