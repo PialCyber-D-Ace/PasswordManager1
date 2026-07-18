@@ -23,7 +23,6 @@ body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color
 .site-cell { display: flex; align-items: center; gap: 12px; } .site-logo { width: 36px; height: 36px; border-radius: 10px; background: var(--gradient); display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 14px; flex-shrink: 0; } .site-info .name { font-weight: 600; } .site-info .url { font-size: 12px; color: var(--text-muted); }
 .pass-cell { display: flex; align-items: center; gap: 8px; font-family: monospace; font-size: 13px; } .actions { display: flex; gap: 6px; }
 .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); } .empty-state i { font-size: 48px; margin-bottom: 16px; opacity: 0.4; } .empty-state h3 { color: var(--text); margin-bottom: 8px; }
-/* FIXED: Premium dark-theme category badges */
 .category-badge { font-size:12px; padding:4px 10px; border-radius:6px; font-weight:600; display:inline-block; border: 1px solid transparent; }
 .toast-container { position: fixed; top: 24px; right: 24px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; } .toast { min-width: 280px; padding: 14px 18px; background: rgba(15,20,36,0.95); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); animation: slideIn 0.3s ease; } .toast.success { border-left: 3px solid #10b981; } .toast.error { border-left: 3px solid #ef4444; } .toast i { font-size: 18px; } .toast.success i { color: #10b981; } .toast.error i { color: #ef4444; } .toast .msg { font-size: 14px; flex: 1; } @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 .modal-backdrop { position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 20px; } .modal-backdrop.active { display: flex; animation: fadeIn 0.2s ease; } @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } .modal { background: #0f1424; border: 1px solid var(--border); border-radius: 18px; padding: 28px; max-width: 420px; width: 100%; animation: scaleIn 0.25s; } @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } } .modal h3 { font-size: 18px; margin-bottom: 8px; } .modal p { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; } .modal-actions { display: flex; gap: 10px; justify-content: flex-end; } .loader { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; } @keyframes spin { to { transform: rotate(360deg); } }
@@ -50,7 +49,7 @@ body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color
     </div>
 </div>
 <script>
-// FIXED: Premium dark-theme category styles (semi-transparent bg + bright text + subtle border)
+// Category style mapping
 function getCategoryStyle(category) {
     const styles = {
         'General': 'background: rgba(79, 124, 255, 0.15); color: #4f7cff; border: 1px solid rgba(79, 124, 255, 0.3);',
@@ -62,6 +61,34 @@ function getCategoryStyle(category) {
         'Other': 'background: rgba(107, 114, 128, 0.15); color: #9ca3af; border: 1px solid rgba(107, 114, 128, 0.3);'
     };
     return styles[category] || styles['General'];
+}
+
+// Statistics calculation function
+function updateStats(passwords) {
+    document.getElementById('statTotal').textContent = passwords.length;
+    
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    const recentCount = passwords.filter(p => {
+        const createdDate = new Date(p.createdAt);
+        return createdDate >= oneWeekAgo;
+    }).length;
+    document.getElementById('statRecent').textContent = recentCount;
+    
+    const categories = new Set(passwords.map(p => p.category || 'General'));
+    document.getElementById('statCategories').textContent = categories.size;
+    
+    const strongCount = passwords.filter(p => {
+        const pass = p.password;
+        const hasLength = pass.length >= 12;
+        const hasUpper = /[A-Z]/.test(pass);
+        const hasLower = /[a-z]/.test(pass);
+        const hasNumber = /[0-9]/.test(pass);
+        const hasSpecial = /[^A-Za-z0-9]/.test(pass);
+        const strengthScore = [hasUpper, hasLower, hasNumber, hasSpecial].filter(Boolean).length;
+        return hasLength && strengthScore >= 3;
+    }).length;
+    document.getElementById('statStrong').textContent = strongCount;
 }
 
 // 1. Check Login & Set Welcome Name
@@ -121,6 +148,10 @@ async function loadPasswords() {
                 tbody.appendChild(tr);
             });
         }
+        
+        // Calculate and update statistics
+        updateStats(passwords);
+        
     } catch (err) {
         console.error('Failed to load passwords', err);
     }
