@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY src/passwordmanager /app/src/passwordmanager
 COPY frontend /app/frontend
-COPY data /app/data
+
 
 RUN javac src/passwordmanager/*.java -d out
 
